@@ -23,7 +23,7 @@ variable "client_secret" {
 }
 
 
-# Need to put all the IP addresses in variables and then in .tfvars. 
+# Networking. 
 
 
 variable "location" {
@@ -31,7 +31,6 @@ variable "location" {
   description = "Azure region where resources will be deployed."
   
 }
-
 
 variable "my_ip" {
   type        = string
@@ -42,6 +41,36 @@ variable "vnet_address_space" {
   type = list(string)
 }
 
+variable "tags" {
+  type = map(string)
+}
+
+
+# VMS info
+
+variable "vm_names" {
+  type = object({
+    frontendvm = string
+    backendvm  = string
+  })
+}
+
+variable "admin_username" {
+  type = string
+  
+}
+
+
+
+variable "vm_size" {
+  type    = string
+  default = "Standard_D2as_v7"
+}
+
+
+variable "resource_group_name" {
+  type=string
+}
 
 
   

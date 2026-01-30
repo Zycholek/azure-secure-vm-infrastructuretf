@@ -1,8 +1,9 @@
 
-variable "vm_name" {
-    type = string
-    description = "Name of the vm"
-  
+variable "vm_names" {
+  type = object({
+    frontendvm = string
+    backendvm  = string
+  })
 }
 
 variable "resource_group_name" {
@@ -28,17 +29,6 @@ variable "admin_ssh_public_key" {
 }
 
 
-variable "subnet_id" {
-  type = string
-  description = "Subnet ID where the NIC will be placed."
-}
-
-variable "assign_public_ip" {
-  type        = bool
-  default     = false
-
-  description = "Whether to create and attach a Public IP."
-}
 
 variable "tags" {
   description = "Tags to apply to all resources."
@@ -46,7 +36,13 @@ variable "tags" {
 }
 
 
+variable "frontend_subnet_id" {
+  type = string
+}
 
+variable "backend_subnet_id" {
+  type = string
+}
 
 
 

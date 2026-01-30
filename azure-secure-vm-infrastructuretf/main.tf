@@ -20,16 +20,14 @@ provider "azurerm" {
 
 
 
-resource "azurerm_resource_group" "tfproject-dev-rg" {
-  name     = "tfproject-rg"
-  location = var.location
-}
+
+
 
 
 module "network" {
   source = "./modules/network"
 
-  resource_group_name = azurerm_resource_group.tfproject-dev-rg.name
+  resource_group_name = var.resource_group_name 
   my_ip = var.my_ip
   vnet_address_space = var.vnet_address_space
   location            = var.location
@@ -37,33 +35,25 @@ module "network" {
 }
 
 
-module "frontend_vm" {
-  source = "./modules/vm"
-  vm_name              = "dev-frontend-vm"
-  vm_size              = "Standard_B2s"
-  admin_username       = var.admin_username
-  admin_ssh_public_key = var.admin_ssh_public_key
 
-  subnet_id        = module.network.dev-subnet-frontend-01.id
-  assign_public_ip = true
-
-  resource_group_name = module.network.resource_group_name
-  location            = module.network.location
-  tags                = var.tags
-}
-
-module "backend_vm" {
+module "vm" {
   source = "./modules/vm"
 
-  vm_name              = "dev-backend-vm"
-  vm_size              = "Standard_B2s"
-  admin_username       = var.admin_username
-  admin_ssh_public_key = var.admin_ssh_public_key
+ # VM names
+  vm_names = var.vm_names
 
-  subnet_id        = module.network.backend_subnet_id
-  assign_public_ip = false
+  # Networking (coming from network module outputs)
+  frontend_subnet_id = module.network.dev_subnet_frontend_01_id
+  backend_subnet_id  = module.network.dev_subnet_backend_01_id
 
+
+  # Common settings
   resource_group_name = module.network.resource_group_name
   location            = module.network.location
+  vm_size             = var.vm_size
+  admin_username      = var.admin_username
+  admin_ssh_public_key = file("C:/Users/user/.ssh/myfrontvmkey.pub")
   tags                = var.tags
+
+  
 }

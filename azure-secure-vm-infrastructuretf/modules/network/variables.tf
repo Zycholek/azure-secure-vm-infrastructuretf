@@ -22,3 +22,5 @@ variable "my_ip" {
   type        = string
   description = "Your public IP address in CIDR notation for SSH access."
 }
+
+

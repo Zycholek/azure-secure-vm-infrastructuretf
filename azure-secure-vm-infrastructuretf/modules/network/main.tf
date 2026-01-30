@@ -1,3 +1,9 @@
+resource "azurerm_resource_group" "tfproject_dev_rg" {
+  name     = var.resource_group_name
+  location = var.location
+  
+}
+
 resource "azurerm_virtual_network" "tfproject-dev-vnet" {
   name                = "tfproject-dev-vnet"
   location            = var.location
@@ -11,14 +17,14 @@ resource "azurerm_virtual_network" "tfproject-dev-vnet" {
 }
   
 
-  resource "azurerm_subnet" "dev-subnet-frontend-01" {
+  resource "azurerm_subnet" "dev_subnet_frontend_01" {
     name             = "dev-subnet-frontend-01"
     resource_group_name  = var.resource_group_name
     virtual_network_name = azurerm_virtual_network.tfproject-dev-vnet.name
     address_prefixes = ["10.0.1.0/24"]
   }
 
-resource "azurerm_subnet" "dev-subnet-backend-01" {
+resource "azurerm_subnet" "dev_subnet_backend_01" {
     name             = "dev-subnet-backend-01"
     resource_group_name  = var.resource_group_name
     virtual_network_name = azurerm_virtual_network.tfproject-dev-vnet.name
@@ -27,7 +33,7 @@ resource "azurerm_subnet" "dev-subnet-backend-01" {
 
 
 
-resource "azurerm_network_security_group" "dev-frontend-nsg" {
+resource "azurerm_network_security_group" "dev_frontend_nsg" {
   name                = "dev-frontend-nsg"
   location            = var.location
   resource_group_name = var.resource_group_name
@@ -73,13 +79,13 @@ security_rule {
 
 
 resource "azurerm_subnet_network_security_group_association" "front-front-association" {
-  subnet_id                 = azurerm_subnet.dev-subnet-frontend-01.id
-  network_security_group_id = azurerm_network_security_group.dev-frontend-nsg.id
+  subnet_id                 = azurerm_subnet.dev_subnet_frontend_01.id
+  network_security_group_id = azurerm_network_security_group.dev_frontend_nsg.id
   
 }
 
 
- resource "azurerm_network_security_group" "dev-backend-nsg" {
+ resource "azurerm_network_security_group" "dev_backend_nsg" {
   name                = "dev-backend-nsg"
   location            = var.location
   resource_group_name = var.resource_group_name
@@ -99,8 +105,8 @@ security_rule {
 }
 
 resource "azurerm_subnet_network_security_group_association" "back-back-association" {
-  subnet_id                 = azurerm_subnet.dev-subnet-backend-01.id
-  network_security_group_id = azurerm_network_security_group.dev-backend-nsg.id
+  subnet_id                 = azurerm_subnet.dev_subnet_backend_01.id
+  network_security_group_id = azurerm_network_security_group.dev_backend_nsg.id
   
 
 
