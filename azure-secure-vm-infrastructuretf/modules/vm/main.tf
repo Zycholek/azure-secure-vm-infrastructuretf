@@ -36,6 +36,7 @@ resource "azurerm_linux_virtual_machine" "frontendvm" {
     azurerm_network_interface.frontendvm_nic.id,
   ]
 
+
   admin_ssh_key {
     username   = var.admin_username
     public_key = var.admin_ssh_public_key
@@ -50,7 +51,7 @@ resource "azurerm_linux_virtual_machine" "frontendvm" {
   source_image_reference {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
+    sku       = "22_04-lts-gen2"
     version   = "latest"
   }
 
@@ -108,7 +109,7 @@ resource "azurerm_linux_virtual_machine" "backendvm" {
   source_image_reference {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
+    sku       = "22_04-lts-gen2"
     version   = "latest"
   }
 
