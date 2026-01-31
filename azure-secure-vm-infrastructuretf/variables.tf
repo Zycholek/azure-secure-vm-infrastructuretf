@@ -22,6 +22,12 @@ variable "client_secret" {
   sensitive   = true
 }
 
+# General
+
+variable "resource_group_name" {
+  type=string
+}
+
 
 # Networking. 
 
@@ -60,19 +66,16 @@ variable "admin_username" {
   
 }
 
-
-
 variable "vm_size" {
   type    = string
   default = "Standard_D2as_v7"
 }
 
+# For keyvault module calling
 
-variable "resource_group_name" {
-  type=string
+variable "env" {
+  type = string
 }
-
-
   
 
 

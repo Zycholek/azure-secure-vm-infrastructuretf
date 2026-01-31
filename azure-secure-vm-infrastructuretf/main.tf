@@ -54,6 +54,15 @@ module "vm" {
   admin_username      = var.admin_username
   admin_ssh_public_key = file("C:/Users/user/.ssh/myfrontvmkey.pub")
   tags                = var.tags
+}
 
-  
+
+module "keyvault" {
+  source = "./modules/keyvault"
+  resource_group_name = module.network.resource_group_name
+  location            = var.location
+  env = var.env
+  vm_identities       = module.vm.vm_identities
+  tags = var.tags
+
 }
