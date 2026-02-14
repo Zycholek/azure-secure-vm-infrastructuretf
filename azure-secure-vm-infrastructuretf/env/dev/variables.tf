@@ -25,7 +25,7 @@ variable "client_secret" {
 # General
 
 variable "resource_group_name" {
-  type=string
+  type = string
 }
 
 

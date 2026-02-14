@@ -66,3 +66,23 @@ module "keyvault" {
   tags = var.tags
 
 }
+
+module "monitoring" {
+  source = "../../modules/monitoring"
+  resource_group_name = module.network.resource_group_name
+  location            = module.network.location
+  env                 = var.env
+  retention_in_days = 30
+
+  vm_ids = module.vm.vm_ids
+  
+  nsg_ids = [
+    module.network.dev_frontend_nsg,
+    module.network.dev_backend_nsg
+  ]
+  vnet_id = module.network.vnet_id
+  key_vault_id = module.keyvault.key_vault_id
+
+
+
+}
