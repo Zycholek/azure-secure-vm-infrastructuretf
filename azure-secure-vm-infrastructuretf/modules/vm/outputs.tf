@@ -12,3 +12,11 @@ output "vm_ids" {
     azurerm_linux_virtual_machine.backendvm.id
   ]
 }
+
+output "frontend_nic_id" {
+  value = azurerm_network_interface.frontendvm_nic.id
+}
+
+output "backend_nic_id" {
+  value = azurerm_network_interface.backendvm_nic.id
+}

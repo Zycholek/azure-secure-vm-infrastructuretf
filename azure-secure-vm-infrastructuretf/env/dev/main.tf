@@ -75,7 +75,7 @@ module "monitoring" {
   retention_in_days = 30
 
   vm_ids = module.vm.vm_ids
-  
+
   nsg_ids = [
     module.network.dev_frontend_nsg,
     module.network.dev_backend_nsg
@@ -83,6 +83,14 @@ module "monitoring" {
   vnet_id = module.network.vnet_id
   key_vault_id = module.keyvault.key_vault_id
 
+}
 
+module "loadbalancing" {
+  source = "../../modules/loadbalancing"
 
+resource_group_name = module.network.resource_group_name
+location = module.network.location
+env = var.env
+
+frontend_nic_id = module.vm.frontend_nic_id
 }
