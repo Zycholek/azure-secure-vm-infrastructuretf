@@ -21,3 +21,7 @@ output "dev_frontend_nsg" {
 output "dev_backend_nsg" {
   value = azurerm_network_security_group.dev_backend_nsg.id
 }
+
+output "vnet_id" {
+  value = azurerm_virtual_network.tfproject-dev-vnet.id
+}

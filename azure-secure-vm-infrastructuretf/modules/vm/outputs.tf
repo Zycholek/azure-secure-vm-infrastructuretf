@@ -5,3 +5,10 @@ output "vm_identities" {
     backend  = azurerm_linux_virtual_machine.backendvm.identity[0].principal_id
   }
 }
+
+output "vm_ids" {
+  value = [
+    azurerm_linux_virtual_machine.frontendvm.id,
+    azurerm_linux_virtual_machine.backendvm.id
+  ]
+}
