@@ -1,26 +1,6 @@
 
-#Authentication (service principal/app registration)
 
-variable "subscription_id" {
-  type        = string
-  description = "Azure subscription ID"
-}
 
-variable "tenant_id" {
-  type        = string
-  description = "Azure tenant ID"
-}
-
-variable "client_id" {
-  type        = string
-  description = "Azure client ID (App Registration)"
-}
-
-variable "client_secret" {
-  type        = string
-  description = "Azure client secret"
-  sensitive   = true
-}
 
 # General
 
@@ -47,6 +27,14 @@ variable "vnet_address_space" {
   type = list(string)
 }
 
+
+variable "frontend_subnet_prefix" {
+  type = list(string)
+}
+
+variable "backend_subnet_prefix" {
+  type = list(string)
+}
 variable "tags" {
   type = map(string)
 }

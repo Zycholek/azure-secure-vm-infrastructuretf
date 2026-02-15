@@ -12,12 +12,8 @@ terraform {
 provider "azurerm" {
   features {}
 
-  subscription_id = var.subscription_id
-  tenant_id       = var.tenant_id
-  client_id       = var.client_id
-  client_secret   = var.client_secret
+  
 }
-
 
 
 
@@ -31,7 +27,8 @@ module "network" {
   my_ip = var.my_ip
   vnet_address_space = var.vnet_address_space
   location            = var.location
-
+  frontend_subnet_prefix = var.frontend_subnet_prefix
+  backend_subnet_prefix = var.backend_subnet_prefix
 }
 
 
@@ -94,7 +91,5 @@ env = var.env
 
 frontend_nic_id = module.vm.frontend_nic_id
 
-depends_on = [
-  module.vm
-]
+
 }

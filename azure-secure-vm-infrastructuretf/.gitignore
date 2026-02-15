@@ -40,3 +40,20 @@ terraform.rc
 # Optional: ignore local executables
 terraform.exe
 *.exe
+
+# SSH keys
+*.pem
+*.key
+*.pub
+.ssh/
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Terraform plan files
+*.tfplan
+
+*.log
