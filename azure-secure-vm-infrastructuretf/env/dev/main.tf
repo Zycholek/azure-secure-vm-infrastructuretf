@@ -93,4 +93,8 @@ location = module.network.location
 env = var.env
 
 frontend_nic_id = module.vm.frontend_nic_id
+
+depends_on = [
+  module.vm
+]
 }
