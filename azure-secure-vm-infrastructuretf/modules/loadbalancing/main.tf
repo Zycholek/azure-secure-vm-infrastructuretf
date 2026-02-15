@@ -52,3 +52,20 @@ resource "azurerm_network_interface_backend_address_pool_association" "nic_be_as
   ip_configuration_name   = "ipconfig1"
   backend_address_pool_id = azurerm_lb_backend_address_pool.be_pool.id
 }
+
+resource "azurerm_lb_nat_rule" "ssh_nat" {
+  name                           = "ssh-frontend"
+  resource_group_name            = var.resource_group_name
+  loadbalancer_id                = azurerm_lb.load_balancer.id
+  protocol                       = "Tcp"
+  frontend_port                  = 50001
+  backend_port                   = 22
+  frontend_ip_configuration_name = "PublicIPAddress"
+}
+
+resource "azurerm_network_interface_nat_rule_association" "frontend_ssh" {
+  network_interface_id  = var.frontend_nic_id
+  ip_configuration_name = "ipconfig1"
+  nat_rule_id           = azurerm_lb_nat_rule.ssh_nat.id
+}
+

@@ -47,7 +47,7 @@ resource "azurerm_network_security_group" "dev_frontend_nsg" {
     source_port_range          = "*"
     destination_port_range     = "80"
     source_address_prefix      = "Internet"
-    destination_address_prefix = "10.0.1.0/24"      # frontend subnet CIDR
+    destination_address_prefix = "*"      # frontend subnet CIDR
   }
 
   security_rule {
@@ -59,7 +59,7 @@ resource "azurerm_network_security_group" "dev_frontend_nsg" {
     source_port_range          = "*"
     destination_port_range     = "443"
     source_address_prefix      = "Internet"
-    destination_address_prefix = "10.0.1.0/24"      # frontend subnet CIDR
+    destination_address_prefix = "*"      # frontend subnet CIDR
   }
 
 security_rule {
@@ -71,10 +71,34 @@ security_rule {
   source_port_range          = "*"
   destination_port_range     = "22"
   source_address_prefix      = var.my_ip      # My IP
-  destination_address_prefix = "10.0.1.0/24"      # frontend subnet CIDR
+  destination_address_prefix = "*"      # frontend subnet CIDR
   
   
 }
+
+ security_rule {
+    name                       = "Allow-LB-To-VM-SSH"
+    priority                   = 101
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "AzureLoadBalancer"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "Allow-Internet-NAT-Port"
+    priority                   = 102
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "50001"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
 }
 
 

@@ -1,15 +1,5 @@
 
 
-resource "azurerm_public_ip" "frontendvm_pip" {
-  name                = "${var.vm_names.frontendvm}-pip"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  allocation_method   = "Static"
-  sku                 = "Standard"
-
-  tags = var.tags
-}
-
 resource "azurerm_network_interface" "frontendvm_nic" {
   name                = "${var.vm_names.frontendvm}-nic"
   location            = var.location
@@ -19,7 +9,7 @@ resource "azurerm_network_interface" "frontendvm_nic" {
     name                          = "ipconfig1"
     subnet_id                     = var.frontend_subnet_id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id = azurerm_public_ip.frontendvm_pip.id
+  
   }
 
   tags = var.tags
@@ -60,17 +50,22 @@ resource "azurerm_linux_virtual_machine" "frontendvm" {
   }
 }
 
+resource "azurerm_virtual_machine_extension" "frontend_nginx" {
+  name                 = "install-nginx"
+  virtual_machine_id   = azurerm_linux_virtual_machine.frontendvm.id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.1"
 
+  settings = <<SETTINGS
+{
+  "commandToExecute": "sudo apt-get update && sudo apt-get install -y nginx && sudo systemctl enable nginx && sudo systemctl start nginx && echo '<h1>Frontend VM behind Load Balancer</h1>' | sudo tee /var/www/html/index.html"
+}
+SETTINGS
+}
 
-
-
-
-
-# Placeholder for cloud-init
-  # custom_data = filebase64("${path.module}/cloud-init.yaml")
 
   
-
 resource "azurerm_network_interface" "backendvm_nic" {
   name                = "${var.vm_names.backendvm}-nic"
   location            = var.location
