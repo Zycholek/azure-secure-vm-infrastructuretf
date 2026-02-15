@@ -29,6 +29,8 @@ module "network" {
   location            = var.location
   frontend_subnet_prefix = var.frontend_subnet_prefix
   backend_subnet_prefix = var.backend_subnet_prefix
+
+  tags = var.tags
 }
 
 

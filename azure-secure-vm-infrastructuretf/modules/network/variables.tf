@@ -43,3 +43,8 @@ variable "backend_subnet_prefix" {
   description = "Address prefix for the backend subnet"
 }
 
+variable "tags" {
+  description = "Tags to apply to all resources."
+  type        = map(string)
+}
+

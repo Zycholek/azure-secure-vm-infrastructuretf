@@ -1,5 +1,3 @@
-
-
 resource "azurerm_network_interface" "frontendvm_nic" {
   name                = "${var.vm_names.frontendvm}-nic"
   location            = var.location
@@ -22,6 +20,8 @@ resource "azurerm_linux_virtual_machine" "frontendvm" {
   location            = var.location
   size                = var.vm_size
   admin_username      = var.admin_username
+  disable_password_authentication = true
+
   network_interface_ids = [
     azurerm_network_interface.frontendvm_nic.id,
   ]
@@ -48,6 +48,9 @@ resource "azurerm_linux_virtual_machine" "frontendvm" {
   identity {
     type = "SystemAssigned"
   }
+
+  tags = var.tags
+
 }
 
 resource "azurerm_virtual_machine_extension" "frontend_nginx" {
@@ -87,6 +90,8 @@ resource "azurerm_linux_virtual_machine" "backendvm" {
   location            = var.location
   size                = var.vm_size
   admin_username      = var.admin_username
+  disable_password_authentication = true
+
   network_interface_ids = [
     azurerm_network_interface.backendvm_nic.id,
   ]
@@ -111,14 +116,17 @@ resource "azurerm_linux_virtual_machine" "backendvm" {
   identity {
     type = "SystemAssigned"
   }
+
+tags = var.tags
+
+
 }
 
 
 
 
 
-# Placeholder for cloud-init
-  # custom_data = filebase64("${path.module}/cloud-init.yaml")
+
 
   
 
