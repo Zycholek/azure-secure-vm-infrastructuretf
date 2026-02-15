@@ -23,15 +23,7 @@ variable "my_ip" {
   description = "Your public IP address in CIDR notation for SSH access."
 }
 
-variable "vnet_address_space" {
-  type        = list(string)
-  description = "Address space for the virtual network"
-}
 
-variable "frontend_subnet_prefix" {
-  type        = list(string)
-  description = "Address prefix for the frontend subnet"
-}
 
 variable "frontend_subnet_prefix" {
   type        = list(string)

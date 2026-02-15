@@ -15,16 +15,16 @@ variable "retention_in_days" {
     default = 30
 }
 
-variable "vm_ids" { 
-    type = list(string)
-     }
+variable "vm_ids" {
+  type = map(string)
+}
 
 variable "key_vault_id" {
   type = string
 }
 
 variable "nsg_ids" {
-  type = list(string)
+  type = map(string)
 }
 
 variable "vnet_id" {

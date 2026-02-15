@@ -23,5 +23,5 @@ output "dev_backend_nsg" {
 }
 
 output "vnet_id" {
-  value = azurerm_virtual_network.tfproject-dev-vnet.id
+  value = azurerm_virtual_network.tfproject_dev_vnet.id
 }

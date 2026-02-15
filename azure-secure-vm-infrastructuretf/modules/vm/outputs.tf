@@ -7,10 +7,10 @@ output "vm_identities" {
 }
 
 output "vm_ids" {
-  value = [
-    azurerm_linux_virtual_machine.frontendvm.id,
-    azurerm_linux_virtual_machine.backendvm.id
-  ]
+  value = {
+    backend  = azurerm_linux_virtual_machine.backendvm.id
+    frontend = azurerm_linux_virtual_machine.frontendvm.id
+  }
 }
 
 output "frontend_nic_id" {

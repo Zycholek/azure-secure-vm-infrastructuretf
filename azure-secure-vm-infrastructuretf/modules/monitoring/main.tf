@@ -7,10 +7,10 @@ resource "azurerm_log_analytics_workspace" "la_workspace" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "vm" {
-    for_each = toset(var.vm_ids)
+    for_each = var.vm_ids
 
   name = "diag-vm-${replace(each.key, "/", "-")}"
-  target_resource_id = each.key
+  target_resource_id = each.value
   log_analytics_workspace_id = azurerm_log_analytics_workspace.la_workspace.id
 
  enabled_metric {
@@ -33,10 +33,10 @@ resource "azurerm_monitor_diagnostic_setting" "keyvault" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "nsg" {
-    for_each = toset(var.nsg_ids)
+    for_each = var.nsg_ids
 
   name               = "diag-nsg-${replace(each.key, "/", "-")}"
-  target_resource_id = each.key
+  target_resource_id = each.value
   log_analytics_workspace_id = azurerm_log_analytics_workspace.la_workspace.id
 
  enabled_log {

@@ -4,7 +4,7 @@ resource "azurerm_resource_group" "tfproject_dev_rg" {
   
 }
 
-resource "azurerm_virtual_network" "tfproject-dev-vnet" {
+resource "azurerm_virtual_network" "tfproject_dev_vnet" {
   name                = "tfproject-dev-vnet"
   location            = var.location
   resource_group_name = var.resource_group_name
@@ -20,15 +20,20 @@ resource "azurerm_virtual_network" "tfproject-dev-vnet" {
   resource "azurerm_subnet" "dev_subnet_frontend_01" {
     name             = "dev-subnet-frontend-01"
     resource_group_name  = var.resource_group_name
-    virtual_network_name = azurerm_virtual_network.tfproject-dev-vnet.name
+    virtual_network_name = azurerm_virtual_network.tfproject_dev_vnet.name
     address_prefixes = var.frontend_subnet_prefix
+   
+
   }
 
 resource "azurerm_subnet" "dev_subnet_backend_01" {
     name             = "dev-subnet-backend-01"
     resource_group_name  = var.resource_group_name
-    virtual_network_name = azurerm_virtual_network.tfproject-dev-vnet.name
+    virtual_network_name = azurerm_virtual_network.tfproject_dev_vnet.name
     address_prefixes = var.backend_subnet_prefix
+
+  
+
   }
 
 
@@ -37,6 +42,8 @@ resource "azurerm_network_security_group" "dev_frontend_nsg" {
   name                = "dev-frontend-nsg"
   location            = var.location
   resource_group_name = var.resource_group_name
+  tags = var.tags
+
 
   security_rule {
     name                       = "Allow-HTTP"
@@ -102,9 +109,11 @@ security_rule {
 }
 
 
-resource "azurerm_subnet_network_security_group_association" "front-front-association" {
+resource "azurerm_subnet_network_security_group_association" "front_front_association" {
   subnet_id                 = azurerm_subnet.dev_subnet_frontend_01.id
   network_security_group_id = azurerm_network_security_group.dev_frontend_nsg.id
+  
+
   
 }
 
@@ -113,6 +122,9 @@ resource "azurerm_subnet_network_security_group_association" "front-front-associ
   name                = "dev-backend-nsg"
   location            = var.location
   resource_group_name = var.resource_group_name
+
+  tags = var.tags
+
 
 security_rule {
   name                        = "Allow-Frontend-To-Backend"
@@ -128,10 +140,10 @@ security_rule {
 
 }
 
-resource "azurerm_subnet_network_security_group_association" "back-back-association" {
+resource "azurerm_subnet_network_security_group_association" "back_back_association" {
   subnet_id                 = azurerm_subnet.dev_subnet_backend_01.id
   network_security_group_id = azurerm_network_security_group.dev_backend_nsg.id
-  
+
 
 
 }

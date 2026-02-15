@@ -11,7 +11,7 @@ terraform {
 
 provider "azurerm" {
   features {}
-
+subscription_id = var.subscription_id
   
 }
 
@@ -75,10 +75,13 @@ module "monitoring" {
 
   vm_ids = module.vm.vm_ids
 
-  nsg_ids = [
-    module.network.dev_frontend_nsg,
-    module.network.dev_backend_nsg
-  ]
+  nsg_ids = {
+    backend  = module.network.dev_backend_nsg
+    frontend = module.network.dev_frontend_nsg
+  }
+
+
+
   vnet_id = module.network.vnet_id
   key_vault_id = module.keyvault.key_vault_id
 
