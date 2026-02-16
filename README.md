@@ -54,6 +54,7 @@ Each module can be validated independently.
 GitHub‑ready structure
 This is the same structure used in open‑source Terraform registries.
 
+
 .
 ├── env/
 │   └── dev/
@@ -71,6 +72,7 @@ This is the same structure used in open‑source Terraform registries.
 │   └── loadbalancing/
 │
 └── README.md
+
 
 Why this structure?
 
