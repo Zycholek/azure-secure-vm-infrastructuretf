@@ -56,22 +56,47 @@ This is the same structure used in open‑source Terraform registries.
 
 
 .
-├── env/
-│   └── dev/
-│       ├── main.tf
-│       ├── variables.tf
-│       ├── terraform.tfvars (ignored)
-│       ├── backend.tf (ignored)
-│       └── outputs.tf
-│
+├── README.md
+├── .gitignore
 ├── modules/
 │   ├── network/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   ├── outputs.tf
+│   │
 │   ├── vm/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   ├── outputs.tf
+│   │
 │   ├── keyvault/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   ├── outputs.tf
+│   │
 │   ├── monitoring/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   ├── outputs.tf
+│   │
 │   └── loadbalancing/
+│       ├── main.tf
+│       ├── variables.tf
+│       ├── outputs.tf
 │
-└── README.md
+└── env/
+    ├── dev/
+    │   ├── main.tf
+    │   ├── variables.tf
+    │   ├── terraform.tfvars
+    │   ├── outputs.tf
+    │   ├── backend.tf (ignored)
+    │   └── backend.tf.example
+    │
+    └── (future environments)
+        ├── staging/
+        └── prod/
+
 
 
 Why this structure?
