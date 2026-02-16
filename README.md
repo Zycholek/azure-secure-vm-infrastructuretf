@@ -70,6 +70,9 @@ enable and start the service
 ensure the server is reachable through the load balancer
 
 This approach demonstrates a production‑ready pattern where compute resources remain private, and all ingress traffic is routed through controlled, observable, and secure entry points.
+
+<img width="2048" height="1056" alt="image" src="https://github.com/user-attachments/assets/c6b99b3b-002e-4348-9d23-028dd93a6bf1" />
+
 ---
 
 # Why This Project Uses Terraform Modules
