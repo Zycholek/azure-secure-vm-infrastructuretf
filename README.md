@@ -1,201 +1,246 @@
-# Terraform Azure Infrastructure – Modular, Production‑Ready Deployment
+# Terraform Azure Infrastructure – Modular, Production-Ready Deployment
 
-This repository contains a fully modular, production‑grade Terraform configuration for deploying a complete Azure environment.
-It is designed with scalability, reusability, security, and clean architecture in mind — following the same patterns used by senior cloud engineers in real‑world enterprise environments.
+This repository contains a fully modular, production-grade Terraform configuration for deploying a complete Microsoft Azure environment.
 
-The project is structured around independent Terraform modules, each responsible for a separate Azure components.
-The root configuration orchestrates these modules into a cohesive, maintainable infrastructure stack.
+The design focuses on:
 
+- Scalability  
+- Reusability  
+- Security  
+- Clean architecture  
 
-High‑Level Architecture
+It follows patterns commonly used by senior cloud engineers in enterprise environments.
+
+The project is structured around independent Terraform modules, each responsible for a specific Azure component. The root configuration orchestrates these modules into a cohesive, maintainable infrastructure stack.
+
+---
+
+# High-Level Architecture
 
 This deployment provisions a complete Azure environment consisting of:
 
-Virtual Network (VNet) with frontend and backend subnets
-Network Security Groups (NSGs) with inbound/outbound rules
-Linux Virtual Machines with system‑assigned managed identities
-Azure Load Balancer (Standard SKU)
-Frontend Public IP
-Backend pool
-Health probe
-HTTP load‑balancing rule
-SSH NAT rule
-Azure Key Vault with access policies for VM identities
-Log Analytics Workspace
+- Virtual Network (VNet)
+  - Frontend subnet
+  - Backend subnet
+- Network Security Groups (NSGs) with inbound and outbound rules
+- Linux Virtual Machines with system-assigned managed identities
+- Azure Load Balancer (Standard SKU)
+  - Frontend Public IP
+  - Backend pool
+  - Health probe
+  - HTTP load-balancing rule
+  - SSH NAT rule
+- Azure Key Vault with access policies for VM identities
+- Log Analytics Workspace
+- Diagnostic Settings for:
+  - VMs
+  - NSGs
+  - VNet
+  - Key Vault
+- Remote Terraform state stored in Azure Storage  
+  (`backend.tf` excluded from repository)
 
-Diagnostic Settings for:
+The architecture follows a hub-and-spoke-ready pattern and can easily be extended to support multi-environment deployments (dev / staging / prod).
 
-VMs
-NSGs
-VNet
-Key Vault
+---
 
-Remote Terraform state stored in Azure Storage (backend.tf excluded from repo)
+# Why This Project Uses Terraform Modules
 
-The architecture follows a hub‑and‑spoke‑ready pattern and can be extended to multi‑environment deployments (dev/staging/prod).
+This project intentionally follows a modular Terraform design, which provides:
 
-Why This Project Uses Terraform Modules
-This project is intentionally built using modular Terraform design, which provides:
+## Reusability
 
-Reusability
-Each module is self‑contained and can be reused across environments or even different projects.
+Each module is self-contained and reusable across environments or even different projects.
 
-Separation of concerns
-Networking, compute, security, monitoring, and load balancing are isolated into their own modules.
+## Separation of Concerns
 
-Scalability
-Adding new VMs, subnets, or environments requires minimal changes.
+Networking, compute, security, monitoring, and load balancing are isolated into independent modules.
 
-Maintainability
-Modules reduce duplication and make the codebase easier to reason about.
+## Scalability
 
-Testability
-Each module can be validated independently.
+Adding new VMs, subnets, or entire environments requires minimal changes.
 
-GitHub‑ready structure
-This is the same structure used in open‑source Terraform registries.
+## Maintainability
 
+Modules reduce duplication and improve readability and maintainability of the codebase.
 
+## Testability
+
+Each module can be validated and tested independently.
+
+## GitHub-Ready Structure
+
+The layout mirrors structures used in professional Terraform registries and open-source projects.
+
+---
+
+# Project Structure
+
+```
 .
-├── README.md
-├── .gitignore
-├── modules/
-│   ├── network/
-│   │   ├── main.tf
-│   │   ├── variables.tf
-│   │   ├── outputs.tf
-│   │
-│   ├── vm/
-│   │   ├── main.tf
-│   │   ├── variables.tf
-│   │   ├── outputs.tf
-│   │
-│   ├── keyvault/
-│   │   ├── main.tf
-│   │   ├── variables.tf
-│   │   ├── outputs.tf
-│   │
-│   ├── monitoring/
-│   │   ├── main.tf
-│   │   ├── variables.tf
-│   │   ├── outputs.tf
-│   │
-│   └── loadbalancing/
+├── env/
+│   └── dev/
 │       ├── main.tf
 │       ├── variables.tf
-│       ├── outputs.tf
+│       ├── terraform.tfvars (ignored)
+│       ├── backend.tf (ignored)
+│       └── outputs.tf
 │
-└── env/
-    ├── dev/
-    │   ├── main.tf
-    │   ├── variables.tf
-    │   ├── terraform.tfvars
-    │   ├── outputs.tf
-    │   ├── backend.tf (ignored)
-    │   └── backend.tf.example
-    │
-    └── (future environments)
-        ├── staging/
-        └── prod/
+├── modules/
+│   ├── network/
+│   ├── vm/
+│   ├── keyvault/
+│   ├── monitoring/
+│   └── loadbalancing/
+│
+└── README.md
+```
 
+---
 
+# Why This Structure?
 
-Why this structure?
+- `env/dev` contains environment-specific configuration
+- `modules/` contains reusable infrastructure building blocks
+- The root module orchestrates the modules
+- The layout supports multi-environment deployments (dev / staging / prod)
+- It mirrors the structure used in professional Terraform registries
 
-env/dev contains the environment‑specific configuration
+---
 
-modules/ contains reusable building blocks
+# Module Overview
 
-The root module orchestrates the modules
+Each module is:
 
-This layout supports multi‑environment deployments (dev/staging/prod)
+- Stateless  
+- Fully parameterized  
+- Environment-agnostic  
 
-It mirrors the structure used in professional Terraform registries
+---
 
-Module Overview
-Each module is designed to be stateless, parameterized, and environment‑agnostic.
+## Network Module
 
-Network Module
-Creates:
+### Creates
 
-Resource group
-VNet
-Frontend and backend subnets
-NSGs with multiple rules
+- Resource Group
+- Virtual Network (VNet)
+- Frontend and backend subnets
+- Network Security Groups with multiple rules
 
-Outputs:
-Subnet IDs
-NSG IDs
-VNet ID
-Resource group name
-Location
+### Outputs
 
-This module is the foundation for all other modules.
+- Subnet IDs  
+- NSG IDs  
+- VNet ID  
+- Resource Group name  
+- Location  
 
-VM Module
-Creates:
+This module serves as the foundation for all other modules.
 
-Linux VMs
-NICs
-System‑assigned managed identities
+---
 
-Outputs:
-VM resource IDs
-VM identity object IDs
-NIC IDs
+## VM Module
+
+### Creates
+
+- Linux Virtual Machines
+- Network Interfaces (NICs)
+- System-assigned managed identities
+
+### Outputs
+
+- VM resource IDs  
+- VM identity object IDs  
+- NIC IDs  
 
 These outputs are consumed by the Key Vault and Load Balancer modules.
 
-Key Vault Module
-Creates:
+---
 
-Azure Key Vault
-Access policies for VM identities (dynamic for_each)
+## Key Vault Module
 
-Outputs:
-Key Vault ID
-Key Vault URI
-This module demonstrates proper identity‑based access control.
+### Creates
 
+- Azure Key Vault
+- Access policies for VM identities (dynamic `for_each`)
 
-Monitoring Module
-Creates:
+### Outputs
 
-Log Analytics Workspace
+- Key Vault ID  
+- Key Vault URI  
 
-Diagnostic settings for:
-VMs
-NSGs
-VNet
-Key Vault
+This module demonstrates proper identity-based access control using managed identities.
 
-Outputs:
-Workspace ID
-Workspace name
+---
 
-This module ensures full observability and auditability.
+## Monitoring Module
 
+### Creates
 
-Load Balancing Module
-Creates:
+- Log Analytics Workspace
 
-Public IP
-Standard Load Balancer
-Backend pool
-Health probe
-HTTP rule
-SSH NAT rule
-NIC associations
+### Configures Diagnostic Settings For
 
-Outputs:
-Public IP
-Backend pool ID
-Load Balancer ID
+- Virtual Machines
+- Network Security Groups
+- Virtual Network
+- Key Vault
+
+### Outputs
+
+- Workspace ID  
+- Workspace name  
+
+This module ensures full observability and auditability of the environment.
+
+---
+
+## Load Balancing Module
+
+### Creates
+
+- Public IP
+- Standard Load Balancer
+- Backend pool
+- Health probe
+- HTTP rule
+- SSH NAT rule
+- NIC associations
+
+### Outputs
+
+- Public IP  
+- Backend pool ID  
+- Load Balancer ID  
 
 This module demonstrates proper LB configuration with NAT and backend pools.
 
-Security Considerations
-terraform.tfvars and backend.tf are intentionally excluded from version control
+---
+
+# Security Considerations
+
+- `terraform.tfvars` and `backend.tf` are intentionally excluded from version control
+- No secrets are stored in Terraform code
+- SSH keys are loaded from local files
+- Managed identities are used instead of service principals
+- Tags are applied consistently for cost management and governance
+
+---
+
+# Summary
+
+This project demonstrates a production-grade, modular Terraform architecture for Azure infrastructure.
+
+It follows best practices in:
+
+- Infrastructure design  
+- Security  
+- Observability  
+- Scalability  
+- Code organization  
+
+The structure is suitable for real-world enterprise deployments and can easily be extended to support additional environments, services, or advanced networking patterns.
+````
 No secrets are stored in Terraform code
 SSH keys are loaded from local files
 Managed identities are used instead of service principals
