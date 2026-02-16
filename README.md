@@ -9,7 +9,6 @@ The design focuses on:
 - Security  
 - Clean architecture  
 
-It follows patterns commonly used by senior cloud engineers in enterprise environments.
 
 The project is structured around independent Terraform modules, each responsible for a specific Azure component. The root configuration orchestrates these modules into a cohesive, maintainable infrastructure stack.
 
@@ -42,6 +41,31 @@ This deployment provisions a complete Azure environment consisting of:
 
 The architecture can easily be extended to support multi-environment deployments (dev / staging / prod).
 
+## Frontend VM Configuration (Nginx + Secure Access via Load Balancer)
+
+The frontend virtual machine is configured using a Custom Script Extension (CSE) to automatically install and configure an Nginx web server at deployment time. This ensures that the VM is fully provisioned and ready to serve HTTP traffic without requiring any manual post-deployment steps.
+
+### Key characteristics of the frontend VM:
+
+- **No public IP address**  
+  The VM is deployed without a public IP, following Azure security best practices.  
+  It is not directly reachable from the internet.
+
+- **Inbound access only through the Load Balancer**  
+  All external traffic flows through the Azure Standard Load Balancer, which:
+  - exposes a public IP
+  - forwards HTTP traffic (port 80) to the VM
+  - performs health checks using a TCP probe
+  - provides a secure NAT rule for SSH access (50001 → 22)
+
+- **Nginx installed via Custom Script Extension**  
+  The VM module uses a CSE to:
+  - install Nginx
+  - enable and start the service
+  - ensure the server is reachable through the load balancer
+
+This approach demonstrates a production-ready pattern where compute resources remain private, and all ingress traffic is routed through controlled, observable, and secure entry points.
+```
 ---
 
 # Why This Project Uses Terraform Modules
