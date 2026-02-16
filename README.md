@@ -40,7 +40,7 @@ This deployment provisions a complete Azure environment consisting of:
 - Remote Terraform state stored in Azure Storage  
   (`backend.tf` excluded from repository)
 
-The architecture follows a hub-and-spoke-ready pattern and can easily be extended to support multi-environment deployments (dev / staging / prod).
+The architecture can easily be extended to support multi-environment deployments (dev / staging / prod).
 
 ---
 
