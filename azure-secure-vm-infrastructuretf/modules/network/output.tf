@@ -25,3 +25,11 @@ output "dev_backend_nsg" {
 output "vnet_id" {
   value = azurerm_virtual_network.tfproject_dev_vnet.id
 }
+
+output "frontend_subnet_prefix" {
+  value = var.frontend_subnet_prefix[0]
+}
+
+output "backend_subnet_prefix" {
+  value = var.backend_subnet_prefix[0]
+}

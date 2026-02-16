@@ -9,12 +9,11 @@ resource "azurerm_virtual_network" "tfproject_dev_vnet" {
   location            = var.location
   resource_group_name = var.resource_group_name
   address_space       = var.vnet_address_space
+  tags = var.tags
 
-  tags = {
-  environment = "dev"
 
 }
-}
+
   
 
   resource "azurerm_subnet" "dev_subnet_frontend_01" {
@@ -54,58 +53,71 @@ resource "azurerm_network_security_group" "dev_frontend_nsg" {
     source_port_range          = "*"
     destination_port_range     = "80"
     source_address_prefix      = "Internet"
-    destination_address_prefix = "*"      # frontend subnet CIDR
+    destination_address_prefix = var.frontend_subnet_prefix[0]      # frontend subnet CIDR
   }
 
   security_rule {
     name                       = "Allow-HTTPS"
-    priority                   = 110
+    priority                   = 101
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "443"
     source_address_prefix      = "Internet"
-    destination_address_prefix = "*"      # frontend subnet CIDR
+    destination_address_prefix = var.frontend_subnet_prefix[0]      # frontend subnet CIDR
   }
 
-security_rule {
-  name                       = "Allow-SSH-From-My-IP"
-  priority                   = 120
-  direction                  = "Inbound"
-  access                     = "Allow"
-  protocol                   = "Tcp"
-  source_port_range          = "*"
-  destination_port_range     = "22"
-  source_address_prefix      = var.my_ip      # My IP
-  destination_address_prefix = "*"      # frontend subnet CIDR
-  
-  
-}
 
- security_rule {
+  security_rule {
     name                       = "Allow-LB-To-VM-SSH"
-    priority                   = 101
+    priority                   = 102
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
     source_address_prefix      = "AzureLoadBalancer"
-    destination_address_prefix = "*"
+    destination_address_prefix = var.frontend_subnet_prefix[0]
   }
 
   security_rule {
     name                       = "Allow-Internet-NAT-Port"
-    priority                   = 102
+    priority                   = 103
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "50001"
     source_address_prefix      = "*"
-    destination_address_prefix = "*"
+    destination_address_prefix = var.frontend_subnet_prefix[0]
   }
+
+security_rule {
+  name                       = "Allow-SSH-From-My-IP"
+  priority                   = 110
+  direction                  = "Inbound"
+  access                     = "Allow"
+  protocol                   = "Tcp"
+  source_port_range          = "*"
+  destination_port_range     = "22"
+  source_address_prefix      = var.my_ip      # My IP
+  destination_address_prefix = var.frontend_subnet_prefix[0]      # frontend subnet CIDR
+}
+
+ 
+
+  security_rule {
+  name                       = "Allow-Internet-Outbound"
+  priority                   = 200
+  direction                  = "Outbound"
+  access                     = "Allow"
+  protocol                   = "*"
+  source_port_range          = "*"
+  destination_port_range     = "*"
+  source_address_prefix      = "*"
+  destination_address_prefix = "Internet"
+}
 }
 
 
@@ -113,6 +125,10 @@ resource "azurerm_subnet_network_security_group_association" "front_front_associ
   subnet_id                 = azurerm_subnet.dev_subnet_frontend_01.id
   network_security_group_id = azurerm_network_security_group.dev_frontend_nsg.id
   
+  depends_on = [
+  azurerm_network_security_group.dev_frontend_nsg,
+  azurerm_subnet.dev_subnet_frontend_01
+]
 
   
 }
@@ -134,8 +150,8 @@ security_rule {
   protocol                    = "*"
   source_port_range           = "*"
   destination_port_range      = "*"
-  source_address_prefix       = "10.0.1.0/24"   # frontend subnet CIDR
-  destination_address_prefix  = "10.0.2.0/24"   # backend subnet CIDR
+  source_address_prefix       = var.frontend_subnet_prefix[0]   # frontend subnet CIDR
+  destination_address_prefix  = var.backend_subnet_prefix[0]  # backend subnet CIDR
 }
 
 }
@@ -145,5 +161,9 @@ resource "azurerm_subnet_network_security_group_association" "back_back_associat
   network_security_group_id = azurerm_network_security_group.dev_backend_nsg.id
 
 
+depends_on = [
+  azurerm_network_security_group.dev_backend_nsg,
+  azurerm_subnet.dev_subnet_backend_01
+]
 
 }
