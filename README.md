@@ -11,25 +11,15 @@ High‑Level Architecture
 This deployment provisions a complete Azure environment consisting of:
 
 Virtual Network (VNet) with frontend and backend subnets
-
 Network Security Groups (NSGs) with inbound/outbound rules
-
 Linux Virtual Machines with system‑assigned managed identities
-
 Azure Load Balancer (Standard SKU)
-
 Frontend Public IP
-
 Backend pool
-
 Health probe
-
 HTTP load‑balancing rule
-
 SSH NAT rule
-
 Azure Key Vault with access policies for VM identities
-
 Log Analytics Workspace
 
 Diagnostic Settings for:
