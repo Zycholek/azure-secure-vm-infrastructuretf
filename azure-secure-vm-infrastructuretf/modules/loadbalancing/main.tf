@@ -1,16 +1,20 @@
 resource "azurerm_public_ip" "frontend_ip" {
-  name                = "lb-pip-${var.env}"
+  name                = var.public_ip_name
   location            = var.location
   resource_group_name = var.resource_group_name
   allocation_method   = "Static"
   sku = "Standard"
+
+  tags = var.tags
 }
 
 resource "azurerm_lb" "load_balancer" {
-  name                = "load-balancer-${var.env}"
+  name                = var.lb_name
   location            = var.location
   resource_group_name = var.resource_group_name
   sku = "Standard"
+
+  tags = var.tags
   
 
   frontend_ip_configuration {

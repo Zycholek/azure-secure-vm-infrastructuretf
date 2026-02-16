@@ -18,8 +18,6 @@ subscription_id = var.subscription_id
 
 
 
-
-
 module "network" {
   source = "../../modules/network"
 
@@ -60,9 +58,14 @@ module "keyvault" {
   source = "../../modules/keyvault"
   resource_group_name = module.network.resource_group_name
   location            = var.location
+  key_vault_name = var.key_vault_name
   env = var.env
   vm_identities       = module.vm.vm_identities
   tags = var.tags
+
+  depends_on = [
+    module.network
+  ]
 
 }
 
@@ -70,10 +73,12 @@ module "monitoring" {
   source = "../../modules/monitoring"
   resource_group_name = module.network.resource_group_name
   location            = module.network.location
+  log_analytics_name = var.log_analytics_name
   env                 = var.env
   retention_in_days = 30
 
   vm_ids = module.vm.vm_ids
+  tags = var.tags
 
   nsg_ids = {
     backend  = module.network.dev_backend_nsg
@@ -89,10 +94,13 @@ module "monitoring" {
 
 module "loadbalancing" {
   source = "../../modules/loadbalancing"
-
 resource_group_name = module.network.resource_group_name
 location = module.network.location
+lb_name = var.lb_name
+public_ip_name = var.public_ip_name
 env = var.env
+
+tags = var.tags
 
 frontend_nic_id = module.vm.frontend_nic_id
 

@@ -13,3 +13,17 @@ variable "env" {
 variable "frontend_nic_id" {
   type = string
 }
+
+variable "lb_name" {
+  type = string
+}
+
+variable "public_ip_name" {
+  type = string
+}
+
+variable "tags" {
+
+  type = map(string)
+  
+}

@@ -3,7 +3,7 @@ data "azurerm_client_config" "current" {}
 
 
 resource "azurerm_key_vault" "kv" {
-  name                        = "tfproject${var.env}KV"
+  name = var.key_vault_name
   location                    = var.location
   resource_group_name         = var.resource_group_name
   enabled_for_disk_encryption = true
@@ -12,6 +12,9 @@ resource "azurerm_key_vault" "kv" {
   purge_protection_enabled    = false
   sku_name = "standard"
   tags = var.tags
+
+  
+
 }
 
   resource "azurerm_key_vault_access_policy" "vm_access" {

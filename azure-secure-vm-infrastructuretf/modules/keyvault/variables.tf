@@ -19,3 +19,8 @@ variable "vm_identities" {
 variable "tags" {
   type = map(string)
 }
+
+variable "key_vault_name" {
+  type        = string
+  description = "Name of the Key Vault"
+}

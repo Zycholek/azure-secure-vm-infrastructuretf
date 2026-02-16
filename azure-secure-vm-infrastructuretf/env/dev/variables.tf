@@ -1,7 +1,3 @@
-
-
-
-
 # General
 
 variable "subscription_id" {
@@ -65,9 +61,31 @@ variable "vm_size" {
 
 # For keyvault module calling
 
+
+variable "key_vault_name" {
+  type = string
+}
+
 variable "env" {
   type = string
 }
+
+# Monitoring
+
+variable "log_analytics_name" {
+  type = string
+}
   
+
+# LoadBalancing
+
+
+variable "lb_name" {
+  type = string
+}
+
+variable "public_ip_name" {
+  type = string
+}
 
 

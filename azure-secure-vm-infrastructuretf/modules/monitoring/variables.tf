@@ -30,3 +30,12 @@ variable "nsg_ids" {
 variable "vnet_id" {
     type = string
 }
+
+variable "log_analytics_name" {
+  type        = string
+  description = "Name of the Log Analytics Workspace"
+}
+
+variable "tags" {
+  type = map(string)
+}
