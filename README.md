@@ -6,6 +6,7 @@ It is designed with scalability, reusability, security, and clean architecture i
 The project is structured around independent Terraform modules, each responsible for a separate Azure components.
 The root configuration orchestrates these modules into a cohesive, maintainable infrastructure stack.
 
+
 High‑Level Architecture
 
 This deployment provisions a complete Azure environment consisting of:
