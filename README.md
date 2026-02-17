@@ -148,7 +148,7 @@ The layout mirrors structures used in professional Terraform registries and open
 │
 └── README.md
 ```
-```
+
 
 # Why This Structure?
 
