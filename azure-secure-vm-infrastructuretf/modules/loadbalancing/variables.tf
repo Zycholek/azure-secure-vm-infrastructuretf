@@ -25,5 +25,5 @@ variable "public_ip_name" {
 variable "tags" {
 
   type = map(string)
-  
+
 }

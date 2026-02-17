@@ -3,7 +3,7 @@ resource "azurerm_public_ip" "frontend_ip" {
   location            = var.location
   resource_group_name = var.resource_group_name
   allocation_method   = "Static"
-  sku = "Standard"
+  sku                 = "Standard"
 
   tags = var.tags
 }
@@ -12,10 +12,10 @@ resource "azurerm_lb" "load_balancer" {
   name                = var.lb_name
   location            = var.location
   resource_group_name = var.resource_group_name
-  sku = "Standard"
+  sku                 = "Standard"
 
   tags = var.tags
-  
+
 
   frontend_ip_configuration {
     name                 = "PublicIPAddress"
@@ -32,7 +32,7 @@ resource "azurerm_lb_backend_address_pool" "be_pool" {
 resource "azurerm_lb_probe" "http_probe" {
   loadbalancer_id = azurerm_lb.load_balancer.id
   name            = "http-probe"
-  protocol            = "Tcp"
+  protocol        = "Tcp"
   port            = 80
 }
 
@@ -44,11 +44,11 @@ resource "azurerm_lb_rule" "http_rule" {
   backend_port                   = 80
   frontend_ip_configuration_name = "PublicIPAddress"
 
-  backend_address_pool_ids       = [
+  backend_address_pool_ids = [
     azurerm_lb_backend_address_pool.be_pool.id
   ]
 
-  probe_id                       = azurerm_lb_probe.http_probe.id
+  probe_id = azurerm_lb_probe.http_probe.id
 }
 
 resource "azurerm_network_interface_backend_address_pool_association" "nic_be_assoc" {

@@ -11,8 +11,8 @@ variable "env" {
 }
 
 variable "retention_in_days" {
-    type = number
-    default = 30
+  type    = number
+  default = 30
 }
 
 variable "vm_ids" {
@@ -28,7 +28,7 @@ variable "nsg_ids" {
 }
 
 variable "vnet_id" {
-    type = string
+  type = string
 }
 
 variable "log_analytics_name" {

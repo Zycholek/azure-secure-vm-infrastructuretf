@@ -1,7 +1,7 @@
 resource "azurerm_resource_group" "tfproject_dev_rg" {
   name     = var.resource_group_name
   location = var.location
-  
+
 }
 
 resource "azurerm_virtual_network" "tfproject_dev_vnet" {
@@ -9,31 +9,31 @@ resource "azurerm_virtual_network" "tfproject_dev_vnet" {
   location            = var.location
   resource_group_name = var.resource_group_name
   address_space       = var.vnet_address_space
-  tags = var.tags
+  tags                = var.tags
 
 
 }
 
-  
 
-  resource "azurerm_subnet" "dev_subnet_frontend_01" {
-    name             = "dev-subnet-frontend-01"
-    resource_group_name  = var.resource_group_name
-    virtual_network_name = azurerm_virtual_network.tfproject_dev_vnet.name
-    address_prefixes = var.frontend_subnet_prefix
-   
 
-  }
+resource "azurerm_subnet" "dev_subnet_frontend_01" {
+  name                 = "dev-subnet-frontend-01"
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.tfproject_dev_vnet.name
+  address_prefixes     = var.frontend_subnet_prefix
+
+
+}
 
 resource "azurerm_subnet" "dev_subnet_backend_01" {
-    name             = "dev-subnet-backend-01"
-    resource_group_name  = var.resource_group_name
-    virtual_network_name = azurerm_virtual_network.tfproject_dev_vnet.name
-    address_prefixes = var.backend_subnet_prefix
+  name                 = "dev-subnet-backend-01"
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.tfproject_dev_vnet.name
+  address_prefixes     = var.backend_subnet_prefix
 
-  
 
-  }
+
+}
 
 
 
@@ -41,7 +41,7 @@ resource "azurerm_network_security_group" "dev_frontend_nsg" {
   name                = "dev-frontend-nsg"
   location            = var.location
   resource_group_name = var.resource_group_name
-  tags = var.tags
+  tags                = var.tags
 
 
   security_rule {
@@ -53,7 +53,7 @@ resource "azurerm_network_security_group" "dev_frontend_nsg" {
     source_port_range          = "*"
     destination_port_range     = "80"
     source_address_prefix      = "Internet"
-    destination_address_prefix = var.frontend_subnet_prefix[0]      # frontend subnet CIDR
+    destination_address_prefix = var.frontend_subnet_prefix[0] # frontend subnet CIDR
   }
 
   security_rule {
@@ -65,7 +65,7 @@ resource "azurerm_network_security_group" "dev_frontend_nsg" {
     source_port_range          = "*"
     destination_port_range     = "443"
     source_address_prefix      = "Internet"
-    destination_address_prefix = var.frontend_subnet_prefix[0]      # frontend subnet CIDR
+    destination_address_prefix = var.frontend_subnet_prefix[0] # frontend subnet CIDR
   }
 
 
@@ -93,48 +93,48 @@ resource "azurerm_network_security_group" "dev_frontend_nsg" {
     destination_address_prefix = var.frontend_subnet_prefix[0]
   }
 
-security_rule {
-  name                       = "Allow-SSH-From-My-IP"
-  priority                   = 110
-  direction                  = "Inbound"
-  access                     = "Allow"
-  protocol                   = "Tcp"
-  source_port_range          = "*"
-  destination_port_range     = "22"
-  source_address_prefix      = var.my_ip      # My IP
-  destination_address_prefix = var.frontend_subnet_prefix[0]      # frontend subnet CIDR
-}
+  security_rule {
+    name                       = "Allow-SSH-From-My-IP"
+    priority                   = 110
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = var.my_ip                     # My IP
+    destination_address_prefix = var.frontend_subnet_prefix[0] # frontend subnet CIDR
+  }
 
- 
+
 
   security_rule {
-  name                       = "Allow-Internet-Outbound"
-  priority                   = 200
-  direction                  = "Outbound"
-  access                     = "Allow"
-  protocol                   = "*"
-  source_port_range          = "*"
-  destination_port_range     = "*"
-  source_address_prefix      = "*"
-  destination_address_prefix = "Internet"
-}
+    name                       = "Allow-Internet-Outbound"
+    priority                   = 200
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "Internet"
+  }
 }
 
 
 resource "azurerm_subnet_network_security_group_association" "front_front_association" {
   subnet_id                 = azurerm_subnet.dev_subnet_frontend_01.id
   network_security_group_id = azurerm_network_security_group.dev_frontend_nsg.id
-  
-  depends_on = [
-  azurerm_network_security_group.dev_frontend_nsg,
-  azurerm_subnet.dev_subnet_frontend_01
-]
 
-  
+  depends_on = [
+    azurerm_network_security_group.dev_frontend_nsg,
+    azurerm_subnet.dev_subnet_frontend_01
+  ]
+
+
 }
 
 
- resource "azurerm_network_security_group" "dev_backend_nsg" {
+resource "azurerm_network_security_group" "dev_backend_nsg" {
   name                = "dev-backend-nsg"
   location            = var.location
   resource_group_name = var.resource_group_name
@@ -142,17 +142,17 @@ resource "azurerm_subnet_network_security_group_association" "front_front_associ
   tags = var.tags
 
 
-security_rule {
-  name                        = "Allow-Frontend-To-Backend"
-  priority                    = 100
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "*"
-  source_port_range           = "*"
-  destination_port_range      = "*"
-  source_address_prefix       = var.frontend_subnet_prefix[0]   # frontend subnet CIDR
-  destination_address_prefix  = var.backend_subnet_prefix[0]  # backend subnet CIDR
-}
+  security_rule {
+    name                       = "Allow-Frontend-To-Backend"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = var.frontend_subnet_prefix[0] # frontend subnet CIDR
+    destination_address_prefix = var.backend_subnet_prefix[0]  # backend subnet CIDR
+  }
 
 }
 
@@ -161,9 +161,9 @@ resource "azurerm_subnet_network_security_group_association" "back_back_associat
   network_security_group_id = azurerm_network_security_group.dev_backend_nsg.id
 
 
-depends_on = [
-  azurerm_network_security_group.dev_backend_nsg,
-  azurerm_subnet.dev_subnet_backend_01
-]
+  depends_on = [
+    azurerm_network_security_group.dev_backend_nsg,
+    azurerm_subnet.dev_subnet_backend_01
+  ]
 
 }

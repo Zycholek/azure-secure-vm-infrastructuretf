@@ -7,7 +7,7 @@ resource "azurerm_network_interface" "frontendvm_nic" {
     name                          = "ipconfig1"
     subnet_id                     = var.frontend_subnet_id
     private_ip_address_allocation = "Dynamic"
-  
+
   }
 
   tags = var.tags
@@ -15,11 +15,11 @@ resource "azurerm_network_interface" "frontendvm_nic" {
 
 
 resource "azurerm_linux_virtual_machine" "frontendvm" {
-  name                = var.vm_names.frontendvm
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  size                = var.vm_size
-  admin_username      = var.admin_username
+  name                            = var.vm_names.frontendvm
+  resource_group_name             = var.resource_group_name
+  location                        = var.location
+  size                            = var.vm_size
+  admin_username                  = var.admin_username
   disable_password_authentication = true
 
   network_interface_ids = [
@@ -33,7 +33,7 @@ resource "azurerm_linux_virtual_machine" "frontendvm" {
   }
 
   os_disk {
-    
+
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
@@ -68,7 +68,7 @@ SETTINGS
 }
 
 
-  
+
 resource "azurerm_network_interface" "backendvm_nic" {
   name                = "${var.vm_names.backendvm}-nic"
   location            = var.location
@@ -78,18 +78,18 @@ resource "azurerm_network_interface" "backendvm_nic" {
     name                          = "ipconfig1"
     subnet_id                     = var.backend_subnet_id
     private_ip_address_allocation = "Dynamic"
-    
+
   }
 
   tags = var.tags
 }
 
 resource "azurerm_linux_virtual_machine" "backendvm" {
-  name                = var.vm_names.backendvm
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  size                = var.vm_size
-  admin_username      = var.admin_username
+  name                            = var.vm_names.backendvm
+  resource_group_name             = var.resource_group_name
+  location                        = var.location
+  size                            = var.vm_size
+  admin_username                  = var.admin_username
   disable_password_authentication = true
 
   network_interface_ids = [
@@ -117,7 +117,7 @@ resource "azurerm_linux_virtual_machine" "backendvm" {
     type = "SystemAssigned"
   }
 
-tags = var.tags
+  tags = var.tags
 
 
 }
@@ -128,7 +128,7 @@ tags = var.tags
 
 
 
-  
+
 
 
 

@@ -13,9 +13,9 @@ variable "resource_group_name" {
 
 
 variable "location" {
-  type = string
+  type        = string
   description = "Azure region where resources will be deployed."
-  
+
 }
 
 variable "my_ip" {
@@ -51,7 +51,7 @@ variable "vm_names" {
 
 variable "admin_username" {
   type = string
-  
+
 }
 
 variable "vm_size" {
@@ -75,7 +75,7 @@ variable "env" {
 variable "log_analytics_name" {
   type = string
 }
-  
+
 
 # LoadBalancing
 
