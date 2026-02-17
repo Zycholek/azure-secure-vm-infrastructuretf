@@ -1,0 +1,42 @@
+```markdown
+# Project Structure
+
+```
+.
+├── env/
+│   └── dev/
+│       ├── main.tf
+│       ├── variables.tf
+│       ├── terraform.tfvars (ignored)
+│       ├── backend.tf (ignored)
+│       └── outputs.tf
+│
+├── modules/
+│   ├── network/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   │
+│   ├── vm/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   │
+│   ├── keyvault/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   │
+│   ├── monitoring/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   │
+│   └── loadbalancing/
+│       ├── main.tf
+│       ├── variables.tf
+│       └── outputs.tf
+│
+└── README.md
+```
+```
