@@ -276,14 +276,13 @@ It follows best practices in:
 - Code organization  
 
 The structure is suitable for real-world enterprise deployments and can easily be extended to support additional environments, services, or advanced networking patterns.
-````
+
 No secrets are stored in Terraform code
 SSH keys are loaded from local files
 Managed identities are used instead of service principals
 Tags are applied consistently for cost management and governance
 
 
-```markdown
 # Future Enhancements Roadmap
 
 This project forms a solid foundation for secure VM-based infrastructure. Below are potential future improvements that can evolve the environment toward a more scalable, secure, and cloud-native platform.
