@@ -112,6 +112,9 @@ The layout mirrors structures used in professional Terraform registries and open
 
 # Project Structure
 
+```markdown
+# Project Structure
+
 ```
 .
 ├── env/
@@ -124,15 +127,33 @@ The layout mirrors structures used in professional Terraform registries and open
 │
 ├── modules/
 │   ├── network/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   │
 │   ├── vm/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   │
 │   ├── keyvault/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   │
 │   ├── monitoring/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   │
 │   └── loadbalancing/
+│       ├── main.tf
+│       ├── variables.tf
+│       └── outputs.tf
 │
 └── README.md
 ```
-
----
+```
 
 # Why This Structure?
 
