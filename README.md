@@ -281,3 +281,56 @@ No secrets are stored in Terraform code
 SSH keys are loaded from local files
 Managed identities are used instead of service principals
 Tags are applied consistently for cost management and governance
+
+
+```markdown
+# Future Enhancements Roadmap
+
+This project forms a solid foundation for secure VM-based infrastructure. Below are potential future improvements that can evolve the environment toward a more scalable, secure, and cloud-native platform.
+
+---
+
+## 🔐 Security & Access
+
+- Integrate Azure Bastion to remove public SSH exposure entirely  
+- Enable Just-In-Time VM Access for time-bound administrative access  
+- Replace Key Vault access policies with RBAC-based access control  
+- Add Private Endpoints for Key Vault, Storage, and other services  
+
+---
+
+## 🌐 Networking & Traffic Management
+
+- Introduce Application Gateway with WAF for Layer 7 routing and protection  
+- Implement Hub-and-Spoke architecture for enterprise-grade network segmentation  
+- Add Azure Firewall for outbound filtering and threat protection  
+
+---
+
+## 📊 Monitoring & Reliability
+
+- Add Azure Monitor Alerts (CPU, disk, LB health, VM availability)  
+- Enable VM Insights for deep performance analytics  
+- Create Log Analytics dashboards for operational visibility  
+
+---
+
+## ⚙️ Automation & Scalability
+
+- Replace standalone VMs with Virtual Machine Scale Sets (VMSS)  
+- Add Autoscaling rules based on CPU or HTTP load  
+- Introduce Packer for building hardened custom VM images  
+
+---
+
+## ☁️ Cloud-Native Evolution
+
+- Add Azure Kubernetes Service (AKS) for containerized workloads  
+- Deploy Azure Functions for serverless automation  
+- Integrate Azure SQL or PostgreSQL Flexible Server for managed data services  
+
+---
+
+This roadmap outlines a natural progression from a secure VM-based baseline toward a fully cloud-native, enterprise-grade Azure architecture.
+```
+
