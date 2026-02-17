@@ -108,11 +108,6 @@ Each module can be validated and tested independently.
 
 The layout mirrors structures used in professional Terraform registries and open-source projects.
 
----
-
-# Project Structure
-
-```markdown
 # Project Structure
 
 ```
