@@ -89,3 +89,54 @@ variable "public_ip_name" {
 }
 
 
+# ACI and ACR
+
+variable "acr_name" {
+  description = "Name of the Azure Container Registry"
+  type        = string
+}
+
+variable "aci_name" {
+  description = "Name of the Azure Container Instance group"
+  type        = string
+}
+
+variable "container_name" {
+  description = "Name of the container inside the ACI group"
+  type        = string
+}
+
+variable "image_name" {
+  type = string
+}
+
+variable "image_tag" {
+  type    = string
+  default = "latest"
+}
+
+variable "container_port" {
+  type    = number
+  default = 80
+}
+
+variable "container_cpu" {
+  type    = number
+  default = 1
+}
+
+variable "container_memory" {
+  type    = number
+  default = 1.5
+}
+
+variable "ip_address_type" {
+  type    = string
+  default = "Public"
+}
+
+variable "dns_name_label" {
+  type    = string
+  default = null
+}
+

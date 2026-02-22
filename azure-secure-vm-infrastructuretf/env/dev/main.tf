@@ -94,6 +94,7 @@ module "monitoring" {
 
 module "loadbalancing" {
   source              = "../../modules/loadbalancing"
+
   resource_group_name = module.network.resource_group_name
   location            = module.network.location
   lb_name             = var.lb_name
@@ -104,5 +105,56 @@ module "loadbalancing" {
 
   frontend_nic_id = module.vm.frontend_nic_id
 
+}
+
+resource "random_string" "suffix" {
+  length  = 6
+  special = false
+  upper   = false
+}
+
+module "acr" {
+  source = "../../modules/acr"
+
+  name = var.acr_name
+  resource_group_name = module.network.resource_group_name
+  location            = module.network.location
 
 }
+
+
+
+module "aci" {
+  source = "../../modules/aci"
+
+  name = var.aci_name
+  resource_group_name = module.network.resource_group_name
+  location            = module.network.location
+  container_name      = var.container_name
+
+  acr_login_server = module.acr.login_server
+  image_name = var.image_name 
+  image_tag = var.image_tag
+
+   dns_name_label      = "aci-${random_string.suffix.result}"
+
+  port = var.container_port
+  cpu = var.container_cpu
+  memory = var.container_memory
+
+acr_admin_username = module.acr.admin_username
+  acr_admin_password = module.acr.admin_password
+}
+
+resource "azurerm_role_assignment" "aci_acr_pull" {
+  scope                = module.acr.acr_id
+  role_definition_name = "AcrPull"
+  principal_id         = module.aci.identity_principal_id
+
+  depends_on = [
+    module.aci
+  ]
+}
+
+
+
