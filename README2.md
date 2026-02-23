@@ -19,8 +19,8 @@ The project is structured around independent Terraform modules, each responsible
 This deployment provisions a complete Azure environment consisting of:
 
 - Virtual Network (VNet)
-  - Frontend subnet
-  - Backend subnet
+- Frontend subnet
+- Backend subnet
 - Network Security Groups (NSGs) with inbound and outbound rules
 - Linux Virtual Machines with system-assigned managed identities
 - Azure Load Balancer (Standard SKU)
@@ -29,6 +29,8 @@ This deployment provisions a complete Azure environment consisting of:
   - Health probe
   - HTTP load-balancing rule
   - SSH NAT rule
+- Azure Container Registry (ACR)
+- Azure Container Instances (ACI) with MSI-only authentication
 - Azure Key Vault with access policies for VM identities
 - Log Analytics Workspace
 - Diagnostic Settings for:
@@ -37,39 +39,92 @@ This deployment provisions a complete Azure environment consisting of:
   - VNet
   - Key Vault
 - Remote Terraform state stored in Azure Storage  
-  (`backend.tf` excluded from repository)
+  *(backend.tf excluded from repository)*
 
 The architecture can easily be extended to support multi-environment deployments (dev / staging / prod).
 
-Frontend VM Configuration (Nginx + Secure Access via Load Balancer)
-The frontend virtual machine is configured using a Custom Script Extension (CSE) to automatically install and configure an Nginx web server at deployment time. This ensures that the VM is fully provisioned and ready to serve HTTP traffic without requiring any manual post‑deployment steps.
+---
 
-Key characteristics of the frontend VM:
-No public IP address  
-The VM is deployed without a public IP, following Azure security best practices.
-It is not directly reachable from the internet.
+# Frontend VM Configuration (Nginx + Secure Access via Load Balancer)
 
-Inbound access only through the Load Balancer  
+The frontend virtual machine is configured using a Custom Script Extension (CSE) to automatically install and configure an Nginx web server at deployment time. This ensures that the VM is fully provisioned and ready to serve HTTP traffic without requiring any manual post-deployment steps.
+
+## Key Characteristics
+
+### No public IP address
+The VM is deployed without a public IP, following Azure security best practices. It is not directly reachable from the internet.
+
+### Inbound access only through the Load Balancer
 All external traffic flows through the Azure Standard Load Balancer, which:
 
-exposes a public IP
+- Exposes a public IP
+- Forwards HTTP traffic (port 80) to the VM
+- Performs health checks using a TCP probe
+- Provides a secure NAT rule for SSH access (50001 → 22)
 
-forwards HTTP traffic (port 80) to the VM
+### Nginx installed via Custom Script Extension
 
-performs health checks using a TCP probe
-
-provides a secure NAT rule for SSH access (50001 → 22)
-
-Nginx installed via Custom Script Extension  
 The VM module uses a CSE to:
 
-install Nginx
+- Install Nginx
+- Enable and start the service
+- Ensure the server is reachable through the load balancer
 
-enable and start the service
+This approach demonstrates a production-ready pattern where compute resources remain private, and all ingress traffic is routed through controlled, observable, and secure entry points.
 
-ensure the server is reachable through the load balancer
+---
 
-This approach demonstrates a production‑ready pattern where compute resources remain private, and all ingress traffic is routed through controlled, observable, and secure entry points.
+# Azure Container Registry (ACR) & Azure Container Instances (ACI)
+
+This project also includes a secure, cloud-native container deployment using Azure Container Registry (ACR) and Azure Container Instances (ACI). The design follows Azure best practices and uses Managed Identity (MSI) for passwordless authentication.
+
+## Overview
+
+- ACR stores Docker images for containerized workloads
+- ACI runs containers without managing VMs or Kubernetes
+- MSI allows ACI to pull images securely from ACR without passwords
+
+This pattern integrates seamlessly with the VM-based infrastructure and demonstrates a modern, serverless compute option.
+
+---
+
+# Two-Phase Deployment Strategy (Bootstrap → Secure Mode)
+
+ACI cannot be created using MSI-only. Azure requires admin credentials only during initial creation so the container can pull its first image.
+
+To achieve a secure, passwordless setup, the deployment uses a two-phase strategy:
+
+## Phase 1 — Bootstrap (Admin Credentials Required Once)
+
+- ACR admin is temporarily enabled
+- Terraform passes admin credentials to ACI
+- ACI is created successfully
+- ACI receives a System-Assigned Managed Identity
+- Terraform assigns AcrPull to that identity
+
+## Phase 2 — Secure Mode (MSI-Only)
+
+Once ACI exists and MSI is active:
+
+- ACR admin is disabled manually in Azure Portal
+- Terraform is configured with `ignore_changes` to prevent ACI recreation
+- The `image_registry_credential` block is removed
+- Admin variables are removed from Terraform
+- ACI continues running and pulling images exclusively via MSI
+
+This results in a fully passwordless, secure, and stable configuration.
+
+---
+
+# Final Architecture State
+
+- ACR admin disabled
+- ACI authenticates using MSI-only
+- No secrets or passwords in Terraform
+- No forced recreation of ACI
+- Terraform remains stable and idempotent
+
+This is the recommended production pattern for ACR → ACI deployments.
 
 
 ## Architecture diagram
