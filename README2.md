@@ -116,7 +116,7 @@ This results in a fully passwordless, secure, and stable configuration.
 
 ---
 
-# Final Architecture State
+# Final ACR + ACI Architecture State
 
 - ACR admin disabled
 - ACI authenticates using MSI-only
