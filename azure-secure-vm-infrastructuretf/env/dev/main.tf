@@ -142,8 +142,6 @@ module "aci" {
   cpu = var.container_cpu
   memory = var.container_memory
 
-acr_admin_username = module.acr.admin_username
-  acr_admin_password = module.acr.admin_password
 }
 
 resource "azurerm_role_assignment" "aci_acr_pull" {

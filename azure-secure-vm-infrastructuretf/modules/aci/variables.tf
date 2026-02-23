@@ -60,10 +60,3 @@ variable "depends_on_role_assignment" {
   default = null
 }
 
-variable "acr_admin_username" {
-  type = string
-}
-
-variable "acr_admin_password" {
-  type = string
-}

@@ -4,7 +4,12 @@ resource "azurerm_container_registry" "acr" {
   location            = var.location
 
   sku                 = "Standard"
-  admin_enabled       = false
+  admin_enabled       = true
 
+lifecycle {
+    ignore_changes = [
+      admin_enabled
+    ]
   
+}
 }

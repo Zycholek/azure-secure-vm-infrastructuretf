@@ -6,6 +6,12 @@ resource "azurerm_container_group" "aci" {
   dns_name_label = var.dns_name_label
   os_type             = "Linux"
 
+
+lifecycle {
+    ignore_changes = [
+      image_registry_credential
+    ]
+  }
   
 
   identity {
