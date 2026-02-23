@@ -195,14 +195,23 @@ The layout mirrors structures used in professional Terraform registries and open
 │   │   ├── variables.tf
 │   │   └── outputs.tf
 │   │
-│   └── loadbalancing/
+│   ├── loadbalancing/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   │
+│   ├── acr/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   │
+│   └── aci/
 │       ├── main.tf
 │       ├── variables.tf
 │       └── outputs.tf
 │
 └── README.md
 ```
-
 
 # Why This Structure?
 
