@@ -127,7 +127,7 @@ This results in a fully passwordless, secure, and stable configuration.
 This is the recommended production pattern for ACR → ACI deployments.
 
 
-## Architecture diagram
+## VM Architecture diagram
 
 <img width="2048" height="1056" alt="image" src="https://github.com/user-attachments/assets/c6b99b3b-002e-4348-9d23-028dd93a6bf1" />
 
