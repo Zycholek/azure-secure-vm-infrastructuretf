@@ -38,6 +38,8 @@ This deployment provisions a complete Azure environment consisting of:
   - Key Vault
 - Remote Terraform state stored in Azure Storage  
   (`backend.tf` excluded from repository)
+-Azure Container Registry (ACR)
+-Azure Container Instances (ACI) with MSI-only authentication
 
 The architecture can easily be extended to support multi-environment deployments (dev / staging / prod).
 
@@ -71,6 +73,18 @@ ensure the server is reachable through the load balancer
 
 This approach demonstrates a production‑ready pattern where compute resources remain private, and all ingress traffic is routed through controlled, observable, and secure entry points.
 
+Azure Container Registry (ACR) & Azure Container Instances (ACI)
+This project also includes a secure, cloud‑native container deployment using Azure Container Registry (ACR) and Azure Container Instances (ACI).
+The design follows Azure best practices and uses Managed Identity (MSI) for passwordless authentication.
+
+Overview
+ACR stores Docker images for containerized workloads
+
+ACI runs containers without managing VMs or Kubernetes
+
+MSI allows ACI to pull images securely from ACR without passwords
+
+This pattern integrates seamlessly with the VM-based infrastructure and demonstrates a modern, serverless compute option.
 
 
 ## Architecture diagram
