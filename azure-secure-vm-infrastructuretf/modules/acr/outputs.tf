@@ -13,9 +13,7 @@ output "name" {
   value       = azurerm_container_registry.acr.name
 }
 
-output "admin_username" {
-  value = azurerm_container_registry.acr.name
-}
+
 
 
 
